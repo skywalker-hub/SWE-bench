@@ -274,10 +274,6 @@ def make_repo_script_list_py(
         f"git reset --hard {base_commit}",
         # Remove the remote so the agent won't see newer commits.
         "git remote remove origin",
-        # Make sure conda is available for later use
-        "source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
-        'echo "Current environment: $CONDA_DEFAULT_ENV"',
     ]
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
@@ -306,70 +302,33 @@ def make_repo_script_list_py(
 
 
 def make_env_script_list_py(instance, specs, env_name) -> list:
-    """
-    Creates the list of commands to set up the conda environment for testing.
-    This is the setup script for the environment image.
-    """
+    """Return commands to install dependencies using uv."""
     HEREDOC_DELIMITER = "EOF_59812759871"
-    reqs_commands = [
-        "source /opt/miniconda3/bin/activate",
-    ]
-    # Create conda environment according to install instructinos
+    cmds = []
     pkgs = specs.get("packages", "")
     if pkgs == "requirements.txt":
-        # Create environment
-        cmd = f"conda create -n {env_name} python={specs['python']} -y"
-        reqs_commands.append(cmd)
-
-        # Install dependencies
         reqs = get_requirements(instance)
-        path_to_reqs = "$HOME/requirements.txt"
-        reqs_commands.append(
+        path_to_reqs = "requirements.txt"
+        cmds.append(
             f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
         )
-        cmd = f"conda activate {env_name} && python -m pip install -r {path_to_reqs}"
-        reqs_commands.append(cmd)
-        reqs_commands.append(f"rm {path_to_reqs}")
+        cmds.append(f"uv pip install -r {path_to_reqs}")
+        cmds.append(f"rm {path_to_reqs}")
     elif pkgs == "environment.yml":
-        # Create environment from yml
         reqs = get_environment_yml(instance, env_name)
         path_to_reqs = "environment.yml"
-        reqs_commands.append(
+        cmds.append(
             f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
         )
-        if "no_use_env" in specs and specs["no_use_env"]:
-            # `conda create` based installation
-            cmd = (
-                f"conda create -c conda-forge -n {env_name} python={specs['python']} -y"
-            )
-            reqs_commands.append(cmd)
+        cmds.append(f"uv pip install -r {path_to_reqs}")
+        cmds.append(f"rm {path_to_reqs}")
+    elif pkgs:
+        cmds.append(f"uv pip install {pkgs}")
 
-            # Install dependencies
-            cmd = f"conda env update -f {path_to_reqs}"
-            reqs_commands.append(cmd)
-        else:
-            # `conda env create` based installation
-            cmd = f"conda env create --file {path_to_reqs}"
-            reqs_commands.append(cmd)
-
-            cmd = f"conda activate {env_name} && conda install python={specs['python']} -y"
-            reqs_commands.append(cmd)
-
-        # Remove environment.yml
-        reqs_commands.append(f"rm {path_to_reqs}")
-    else:
-        # Create environment + install dependencies
-        cmd = f"conda create -n {env_name} python={specs['python']} {pkgs} -y"
-        reqs_commands.append(cmd)
-
-    reqs_commands.append(f"conda activate {env_name}")
-
-    # Install additional packages if specified
     if "pip_packages" in specs:
         pip_packages = " ".join(specs["pip_packages"])
-        cmd = f"python -m pip install {pip_packages}"
-        reqs_commands.append(cmd)
-    return reqs_commands
+        cmds.append(f"uv pip install {pip_packages}")
+    return cmds
 
 
 def make_eval_script_list_py(
@@ -393,11 +352,7 @@ def make_eval_script_list_py(
             *get_test_directives(instance),
         ]
     )
-    eval_commands = [
-        "source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
-        f"cd {repo_directory}",
-    ]
+    eval_commands = [f"cd {repo_directory}"]
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
     eval_commands += [
@@ -407,8 +362,6 @@ def make_eval_script_list_py(
         "git status",
         "git show",
         f"git -c core.fileMode=false diff {base_commit}",
-        "source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
     ]
     if "install" in specs:
         eval_commands.append(specs["install"])

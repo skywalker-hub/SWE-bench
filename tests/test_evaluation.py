@@ -1,6 +1,5 @@
 import collections
 import json
-import docker
 
 from swebench.harness.constants import (
     FAIL_TO_PASS,
@@ -18,13 +17,11 @@ TEST_INSTANCE[FAIL_TO_PASS] = "[]"
 
 
 def test_make_run_report(tmpdir) -> None:
-    client = docker.from_env()
     with tmpdir.as_cwd():
         output_path = make_run_report(
             {"test": {KEY_INSTANCE_ID: "test", KEY_MODEL: "test"}},
             [TEST_INSTANCE],
             "test",
-            client,
         )
         assert output_path.is_file()
         report = json.loads(output_path.read_text())

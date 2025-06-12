@@ -24,7 +24,6 @@ dependencies = [
     "beautifulsoup4",
     "chardet",
     "datasets",
-    "docker",
     "ghapi",
     "GitPython",
     "modal",

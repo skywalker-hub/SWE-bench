@@ -10,7 +10,7 @@ This directory contains comprehensive documentation for SWE-bench.
 - **guides/**: Step-by-step guides for common tasks
   - **quickstart.md**: Getting started with SWE-bench
   - **evaluation.md**: How to evaluate models
-  - **docker_setup.md**: Detailed Docker configuration guide
+  - **docker_setup.md**: uv environment setup guide
   - **datasets.md**: Information about available datasets
   - **create_rag_datasets.md**: How to create custom RAG datasets
 - **reference/**: Detailed API and technical references

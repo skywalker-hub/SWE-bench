@@ -59,7 +59,7 @@ nav:
   - "User Guides":
     - "Quickstart": guides/quickstart.md
     - "Evaluation": guides/evaluation.md
-    - "Docker Setup": guides/docker_setup.md
+    - "uv Setup": guides/docker_setup.md
     - "Datasets": guides/datasets.md
     - "Create RAG Datasets": guides/create_rag_datasets.md
   - "Reference":
