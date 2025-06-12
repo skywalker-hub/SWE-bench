@@ -25,7 +25,6 @@ from swebench.harness.constants import (
 )
 from swebench.harness.grading import get_eval_report
 from swebench.harness.reporting import make_run_report
-from swebench.harness.modal_eval import run_instances_modal, validate_modal_credentials
 from swebench.harness.test_spec.test_spec import make_test_spec, TestSpec
 from swebench.harness.utils import (
     EvaluationError,
@@ -290,7 +289,6 @@ def main(
     run_id: str,
     timeout: int,
     rewrite_reports: bool,
-    modal: bool,
     report_dir: str = ".",
 ):
     if dataset_name == "SWE-bench/SWE-bench_Multimodal" and split == "test":
@@ -311,14 +309,6 @@ def main(
 
     dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predictions, run_id, rewrite_reports)
     full_dataset = load_swebench_dataset(dataset_name, split, instance_ids)
-
-    if modal:
-        if not dataset:
-            print("No instances to run.")
-        else:
-            validate_modal_credentials()
-            run_instances_modal(predictions, dataset, full_dataset, run_id, timeout)
-        return
 
     if platform.system() == "Linux":
         resource.setrlimit(resource.RLIMIT_NOFILE, (open_file_limit, open_file_limit))
@@ -363,7 +353,6 @@ if __name__ == "__main__":
         help="Path to predictions file - if 'gold', uses gold predictions",
         required=True,
     )
-
     parser.add_argument(
         "--max_workers",
         type=int,
@@ -385,8 +374,6 @@ if __name__ == "__main__":
         help="Doesn't run new instances, only writes reports for instances with existing test outputs",
     )
     parser.add_argument("--report_dir", type=str, default=".", help="Directory to write reports to")
-
-    parser.add_argument("--modal", type=str2bool, default=False, help="Run on Modal")
 
     args = parser.parse_args()
     main(**vars(args))
