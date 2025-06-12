@@ -325,7 +325,7 @@ def main(
             rewrite_reports=rewrite_reports,
         )
 
-    return make_run_report(predictions, full_dataset, run_id, None)
+    return make_run_report(predictions, full_dataset, run_id)
 
 
 if __name__ == "__main__":
