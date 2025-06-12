@@ -31,3 +31,4 @@ def create_env(scripts: list[str], env_key: str | None = None) -> Path:
                 executable="/bin/bash",
             )
     return env_path
+    

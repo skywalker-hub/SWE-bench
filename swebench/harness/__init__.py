@@ -1,6 +1,5 @@
 from swebench.harness import (
     grading,
-    prepare_images,
     remove_containers,
     reporting,
     run_evaluation,
@@ -13,7 +12,6 @@ from swebench.harness import (
 
 __all__ = [
     "grading",
-    "prepare_images",
     "remove_containers",
     "reporting",
     "run_evaluation",
