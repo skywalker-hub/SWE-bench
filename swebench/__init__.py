@@ -11,23 +11,8 @@ from swebench.harness.constants import (
     MAP_REPO_VERSION_TO_SPECS,
 )
 
-from swebench.harness.docker_build import (
-    build_image,
-    build_base_images,
-    build_env_images,
-    build_instance_images,
-    build_instance_image,
-    close_logger,
-    setup_logger,
-)
 
-from swebench.harness.docker_utils import (
-    cleanup_container,
-    remove_image,
-    copy_to_container,
-    exec_run_with_timeout,
-    list_images,
-)
+
 
 from swebench.harness.grading import (
     compute_fail_to_pass,
