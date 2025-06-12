@@ -68,9 +68,6 @@ KEY_MODEL = "model_name_or_path"
 KEY_PREDICTION = "model_patch"
 
 # Constants - Harness
-DOCKER_PATCH = "/tmp/patch.diff"
-DOCKER_USER = "root"
-DOCKER_WORKDIR = "/testbed"
 LOG_REPORT = "report.json"
 LOG_INSTANCE = "run_instance.log"
 LOG_TEST_OUTPUT = "test_output.txt"
@@ -119,13 +116,6 @@ NON_TEST_EXTS = [
     ".toml",
 ]
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
-DEFAULT_DOCKER_SPECS = {
-    "conda_version": "py311_23.11.0-2",
-    "node_version": "21.6.2",
-    "pnpm_version": "9.5.0",
-    "python_version": "3.9",
-    "ubuntu_version": "22.04",
-}
 FAIL_ONLY_REPOS = {
     "chartjs/Chart.js",
     "processing/p5.js",

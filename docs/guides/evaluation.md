@@ -4,7 +4,7 @@ This guide explains how to evaluate model predictions on SWE-bench tasks.
 
 ## Overview
 
-SWE-bench evaluates models by applying their generated patches to real-world repositories and running the repository's tests to verify if the issue is resolved. The evaluation is performed in a containerized Docker environment to ensure consistent results across different platforms.
+SWE-bench evaluates models by applying their generated patches to real-world repositories and running the repository's tests to verify if the issue is resolved. The evaluation harness now uses [uv](https://github.com/astral-sh/uv) to create lightweight virtual environments for reproducible results.
 
 ## Basic Evaluation
 
@@ -106,26 +106,6 @@ python -m swebench.harness.run_evaluation \
     --max_workers 2
 ```
 
-### Controlling Cache Usage
-
-Control how Docker images are cached between runs with the `--cache_level` parameter:
-
-```bash
-python -m swebench.harness.run_evaluation \
-    --predictions_path <path_to_predictions> \
-    --cache_level env \  # Options: none, base, env, instance
-    --max_workers 8
-```
-
-### Cleaning Up Resources
-
-To automatically clean up resources after evaluation, use the `--clean` parameter:
-
-```bash
-python -m swebench.harness.run_evaluation \
-    --predictions_path <path_to_predictions> \
-    --clean True
-```
 
 ## Understanding Evaluation Results
 
@@ -147,8 +127,6 @@ Key metrics include:
 
 If you encounter issues during evaluation:
 
-1. Check the Docker setup ([Docker Setup Guide](docker_setup.md))
-2. Verify that your predictions file is correctly formatted
-3. Examine the log files in `logs/` for error messages
-4. Try reducing the number of workers with `--max_workers`
-5. Increase available disk space or use `--cache_level=base` to reduce storage needs
+1. Verify that your predictions file is correctly formatted
+2. Examine the log files in `logs/` for error messages
+3. Try reducing the number of workers with `--max_workers`

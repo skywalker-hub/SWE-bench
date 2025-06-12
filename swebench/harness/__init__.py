@@ -1,6 +1,4 @@
 from swebench.harness import (
-    docker_build,
-    docker_utils,
     grading,
     prepare_images,
     remove_containers,
@@ -8,15 +6,12 @@ from swebench.harness import (
     run_evaluation,
     utils,
     constants,
-    dockerfiles,
     log_parsers,
     modal_eval,
     test_spec,
 )
 
 __all__ = [
-    "docker_build",
-    "docker_utils",
     "grading",
     "prepare_images",
     "remove_containers",
@@ -24,7 +19,6 @@ __all__ = [
     "run_evaluation",
     "utils",
     "constants",
-    "dockerfiles",
     "log_parsers",
     "modal_eval",
     "test_spec",

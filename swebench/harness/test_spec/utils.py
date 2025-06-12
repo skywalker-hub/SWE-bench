@@ -47,13 +47,7 @@ def make_env_script_list_common(instance, specs, env_name) -> list:
     Creates the list of commands to set up the environment for testing.
     This is the setup script for the environment image.
     """
-    reqs_commands = []
-    if "apt-pkgs" in specs:
-        reqs_commands += [
-            "apt-get update",
-            f"apt-get install -y {' '.join(specs['apt-pkgs'])}",
-        ]
-    return reqs_commands
+    return []
 
 
 def make_eval_script_list_common(
