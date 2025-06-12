@@ -6,7 +6,6 @@ from swebench.harness import (
     utils,
     constants,
     log_parsers,
-    modal_eval,
     test_spec,
 )
 
@@ -18,6 +17,5 @@ __all__ = [
     "utils",
     "constants",
     "log_parsers",
-    "modal_eval",
     "test_spec",
 ]
