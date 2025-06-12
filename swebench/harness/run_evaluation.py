@@ -110,7 +110,7 @@ def run_instance(
 
     try:
         subprocess.run(
-            f"bash {repo_script}",
+            f"bash {repo_script.resolve()}",
             shell=True,
             check=True,
             cwd=work_dir,
@@ -141,7 +141,7 @@ def run_instance(
         with open(log_dir / "eval_out.txt", "w") as f:
             try:
                 subprocess.run(
-                    f"source {env_path}/bin/activate && bash {eval_script}",
+                    f"source {env_path}/bin/activate && bash {eval_script.resolve()}",
                     shell=True,
                     cwd=work_dir,
                     stdout=f,
